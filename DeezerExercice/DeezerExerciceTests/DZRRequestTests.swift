@@ -35,5 +35,8 @@ class DZRRequestTests: XCTestCase {
         let request = apiRequest.createRequest(type: .artist, method: .albums, id: "134790")
         XCTAssertTrue(request == URL(string:"https://api.deezer.com/artist/134790/albums"))
 
+        let request2 = apiRequest.createRequest(type: .track, method: .empty, id: "3135556")
+        XCTAssertTrue(request2 == URL(string:"https://api.deezer.com/track/3135556/"))
+
     }
 }

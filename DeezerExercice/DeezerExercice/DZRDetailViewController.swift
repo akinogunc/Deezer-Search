@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DetailViewModelDelegate {
+class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DetailViewModelDelegate, DZRPlayerDelegate {
     
     @IBOutlet weak var tableView : UITableView!
     @IBOutlet weak var playButton: UIButton!
@@ -28,6 +28,7 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         tableViewSetup()
         viewModel.delegate = self
         playButton.layer.cornerRadius = 5
+        DZRPlayer.singleton().delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +47,8 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
             DZRPlayer.singleton().playWithUrl(url: url)
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)
+            let indexPath = IndexPath(row: 1, section: 1)
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
         }else if DZRPlayer.singleton().status() == .playing{
             DZRPlayer.singleton().pause()
             playIcon.image = UIImage(named: "play.png")
@@ -57,7 +60,16 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     
+    //DZRPlayer delegate function
+    func playerDidFinishPlaying() {
+        DZRPlayer.singleton().play()
+        playIcon.image = UIImage(named: "pause.png")
+        playButton.setTitle("       Pause", for: .normal)
+        tableViewDeselectPlaying()
+    }
+    
     @IBAction func backAction(_ sender: Any) {
+        DZRPlayer.singleton().clear()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -124,11 +136,13 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         if indexPath.section == 0{
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "DZRDetailTopSpaceCell") as! DZRDetailTopSpaceCell
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
             
         }else if indexPath.row == 0{
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "DZRDetailInfoTableViewCell") as! DZRDetailInfoTableViewCell
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             pageControl = cell.pageControl
             
             if viewModel.album != nil{
@@ -152,10 +166,12 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let url = URL(fileURLWithPath: (viewModel.album?.tracks[indexPath.row-1].previewUrl)!)
-        DZRPlayer.singleton().playWithUrl(url: url)
-        playIcon.image = UIImage(named: "pause.png")
-        playButton.setTitle("       Pause", for: .normal)
+        if indexPath.row > 0{
+            let url = URL(fileURLWithPath: (viewModel.album?.tracks[indexPath.row-1].previewUrl)!)
+            DZRPlayer.singleton().playWithUrl(url: url)
+            playIcon.image = UIImage(named: "pause.png")
+            playButton.setTitle("       Pause", for: .normal)
+        }
     }
     
     func tableViewSetup(){
@@ -163,6 +179,13 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         tableView.register(UINib(nibName: "DZRDetailInfoTableViewCell", bundle: nil), forCellReuseIdentifier: "DZRDetailInfoTableViewCell")
         tableView.register(UINib(nibName: "DZRDetailTrackTableViewCell", bundle: nil), forCellReuseIdentifier: "DZRDetailTrackTableViewCell")
     }
+    
+    func tableViewDeselectPlaying(){
+        if let index = tableView.indexPathForSelectedRow{
+            tableView.deselectRow(at: index, animated: true)
+        }
+    }
+    
 }
 
 extension DZRDetailViewController{

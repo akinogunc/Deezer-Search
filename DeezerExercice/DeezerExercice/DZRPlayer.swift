@@ -15,10 +15,15 @@ enum PlayerStatus{
     case empty
 }
 
-class DZRPlayer: NSObject {
+protocol DZRPlayerDelegate {
+    func playerDidFinishPlaying()
+}
+
+class DZRPlayer: NSObject, AVAudioPlayerDelegate{
     
     var player : AVPlayer!
     var playerItem : AVPlayerItem? = nil
+    var delegate: DZRPlayerDelegate?
 
     private static var sharedDZRPlayer: DZRPlayer = {
         let player = DZRPlayer()
@@ -43,6 +48,8 @@ class DZRPlayer: NSObject {
         playerItem = AVPlayerItem.init(url: url)
         player = AVPlayer(playerItem:playerItem)
         player.play()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
     }
 
     func play(){
@@ -55,6 +62,11 @@ class DZRPlayer: NSObject {
         player.pause()
     }
     
+    func clear(){
+        player.pause()
+        playerItem = nil
+    }
+    
     func status() -> PlayerStatus{
         if playerItem == nil{
             return .empty
@@ -64,6 +76,11 @@ class DZRPlayer: NSObject {
             return .paused
         }
     }
+    
+    @objc func playerDidFinishPlaying(sender: Notification) {
+        print("player finisihed")
+    }
+
 }
 
 extension AVPlayer {

@@ -16,7 +16,8 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchResultMessage: UILabel!
     var viewModel = DZRSearchViewModel()
-    
+    var searchTimer: Timer?
+
     var searchText: String = "" {
         didSet {
             if searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
@@ -73,10 +74,15 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     // MARK: - UISearchBar delegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.clearArtists { self.collectionView.reloadData() }
-        if searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
-        showLoading()
-        self.searchText = searchBar.text!
+        
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { (timer) in
+            self.viewModel.clearArtists { self.collectionView.reloadData() }
+            if searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
+            self.showLoading()
+            self.searchText = searchBar.text!
+        })
+
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

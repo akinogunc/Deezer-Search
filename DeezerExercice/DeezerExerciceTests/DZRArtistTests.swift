@@ -8,7 +8,7 @@
 
 import XCTest
 
-class DZRArtistTest: XCTestCase {
+class DZRArtistTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -26,6 +26,7 @@ class DZRArtistTest: XCTestCase {
             "nb_albums" : "49",
             "nb_fan" : 60625,
             "picture" : "http://api.deezer.com/artist/1033/image",
+            "picture_big": "https://e-cdns-images.dzcdn.net/images/artist/f2bc007e9133c946ac3c3907ddc5d2ea/500x500-000000-80-0-0.jpg",
             "radio" : "1",
             "tracklist" : "http://api.deezer.com/artist/1033/top?limit=50",
             "type" : "artist"] as [String : Any]
@@ -34,7 +35,7 @@ class DZRArtistTest: XCTestCase {
 
         XCTAssertTrue(artist.artistIdentifier == "1033")
         XCTAssertTrue(artist.artistName == "Alain Souchon")
-        XCTAssertTrue(artist.artistPictureUrl == "http://api.deezer.com/artist/1033/image")
+        XCTAssertTrue(artist.artistPictureUrl == "https://e-cdns-images.dzcdn.net/images/artist/f2bc007e9133c946ac3c3907ddc5d2ea/500x500-000000-80-0-0.jpg")
         XCTAssertTrue(artist.fans == "60625")
 
     }
