@@ -31,7 +31,7 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     
     func searchThrottle(){
         searchTimer?.invalidate()
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { (timer) in
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (timer) in
             self.viewModel.clearArtists { self.collectionView.reloadData() }
             if self.searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
             self.showLoading()
