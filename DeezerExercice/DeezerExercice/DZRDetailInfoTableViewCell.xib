@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="DZRDetailInfoTableViewCell" rowHeight="180" id="Nh6-VP-dAj" customClass="DZRDetailInfoTableViewCell" customModule="DeezerExercice" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nh6-VP-dAj" id="anF-id-xAr">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="179.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7mH-xo-wvI">
+                        <rect key="frame" x="0.0" y="178.5" width="375" height="1"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="M02-MT-hLJ"/>
+                        </constraints>
+                    </view>
+                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="V8S-PY-pv9">
+                        <rect key="frame" x="168" y="31" width="39" height="37"/>
+                        <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </pageControl>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ta0-Ww-6YI">
+                        <rect key="frame" x="36" y="68" width="303" height="25"/>
+                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="18"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By Akin Ogunc" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iVQ-22-sdW">
+                        <rect key="frame" x="36" y="97" width="303" height="19.5"/>
+                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ta0-Ww-6YI" firstAttribute="top" secondItem="V8S-PY-pv9" secondAttribute="bottom" id="BMV-xX-TkH"/>
+                    <constraint firstItem="ta0-Ww-6YI" firstAttribute="leading" secondItem="anF-id-xAr" secondAttribute="leadingMargin" constant="20" id="Dpv-3K-he1"/>
+                    <constraint firstItem="V8S-PY-pv9" firstAttribute="top" secondItem="anF-id-xAr" secondAttribute="topMargin" constant="20" id="DqA-cz-tON"/>
+                    <constraint firstAttribute="bottom" secondItem="7mH-xo-wvI" secondAttribute="bottom" id="MSE-fj-6MQ"/>
+                    <constraint firstItem="V8S-PY-pv9" firstAttribute="centerX" secondItem="anF-id-xAr" secondAttribute="centerX" id="Qz8-se-gm2"/>
+                    <constraint firstAttribute="trailing" secondItem="7mH-xo-wvI" secondAttribute="trailing" id="aKu-f2-z1f"/>
+                    <constraint firstItem="iVQ-22-sdW" firstAttribute="leading" secondItem="anF-id-xAr" secondAttribute="leadingMargin" constant="20" id="cbD-3w-XDg"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="iVQ-22-sdW" secondAttribute="trailing" constant="20" id="h59-U6-rNP"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ta0-Ww-6YI" secondAttribute="trailing" constant="20" id="kqh-b4-blq"/>
+                    <constraint firstItem="7mH-xo-wvI" firstAttribute="leading" secondItem="anF-id-xAr" secondAttribute="leading" id="uqj-QV-cjn"/>
+                    <constraint firstItem="iVQ-22-sdW" firstAttribute="top" secondItem="ta0-Ww-6YI" secondAttribute="bottom" constant="4" id="waH-rf-IEi"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="albumName" destination="ta0-Ww-6YI" id="7Yh-dc-u2T"/>
+                <outlet property="artistName" destination="iVQ-22-sdW" id="wJa-KI-GBe"/>
+                <outlet property="pageControl" destination="V8S-PY-pv9" id="Pdb-ZH-zPH"/>
+            </connections>
+            <point key="canvasLocation" x="109.59999999999999" y="40.479760119940032"/>
+        </tableViewCell>
+    </objects>
+</document>
