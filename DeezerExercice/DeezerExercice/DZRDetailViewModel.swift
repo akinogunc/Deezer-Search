@@ -27,12 +27,12 @@ class DZRDetailViewModel {
     var delegate: DetailViewModelDelegate?
     
     init(id : String, type : DetailMode) {
-        getAlbumsWithArtistID(id: id, completion: {
+        getFirstAlbumWithArtistID(id: id, completion: {
             self.delegate?.dataReady()
         })
     }
     
-    func getAlbumsWithArtistID(id: String, completion: @escaping () -> Void) {
+    func getFirstAlbumWithArtistID(id: String, completion: @escaping () -> Void) {
         
         let request = apiRequest.createRequest(type: .artist, method: .albums, id: id)
         
@@ -41,15 +41,15 @@ class DZRDetailViewModel {
             switch response {
             case .success(let json):
                 
-                if let data = json["data"] as? [Any] {
-                    if let firstAlbum = data[0] as? JsonDictionary{
-                        if let id = firstAlbum["id"] as? Int{
-                            self.getFirstAlbum(id: id){
-                                completion()
-                            }
-                        }
-                    }
+                guard let data = json["data"] as? [Any] else {return}
+                if data.count == 0 {return}
+                guard let firstAlbum = data[0] as? JsonDictionary else {return}
+                guard let id = firstAlbum["id"] as? Int else {return}
+                
+                self.getAlbumFrom(id: id){
+                    completion()
                 }
+                
             case .failure:
                 completion()
             case .notConnectedToInternet:
@@ -59,7 +59,7 @@ class DZRDetailViewModel {
         })
     }
 
-    func getFirstAlbum(id: Int, completion: @escaping () -> Void){
+    func getAlbumFrom(id: Int, completion: @escaping () -> Void){
         
         let request = apiRequest.createRequest(type: .album, method: .empty, id: String(id))
         
