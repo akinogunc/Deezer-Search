@@ -20,7 +20,6 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
 
     var searchText: String = "" {
         didSet {
-            if searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
             self.viewModel.searchArtists(query: self.searchText) {response in
                 DispatchQueue.main.sync {
                     self.collectionView.reloadData()
@@ -28,6 +27,16 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
                 }
             }
         }
+    }
+    
+    func searchThrottle(){
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { (timer) in
+            self.viewModel.clearArtists { self.collectionView.reloadData() }
+            if self.searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
+            self.showLoading()
+            self.searchText = self.searchBar.text!
+        })
     }
     
     override func viewDidLoad() {
@@ -74,25 +83,12 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     // MARK: - UISearchBar delegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        searchTimer?.invalidate()
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { (timer) in
-            self.viewModel.clearArtists { self.collectionView.reloadData() }
-            if searchBar.text?.trimmingCharacters(in: CharacterSet.whitespaces).count == 0 { return }
-            self.showLoading()
-            self.searchText = searchBar.text!
-        })
-
+        searchThrottle()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        viewModel.searchArtists(query: self.searchText) {response in
-            DispatchQueue.main.sync {
-                self.collectionView.reloadData()
-                self.showMessage(response: response)
-            }
-        }
+        searchThrottle()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -161,7 +157,9 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     }
 
     func hideLoading(){
-        loadingView.isHidden = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute:{
+            self.loadingView.isHidden = true
+        })
     }
 
 }
