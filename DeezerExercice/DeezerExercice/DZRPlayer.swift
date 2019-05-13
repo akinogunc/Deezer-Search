@@ -63,7 +63,9 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate{
     }
     
     func clear(){
-        player.pause()
+        if player != nil{
+            player.pause()
+        }
         playerItem = nil
     }
     
