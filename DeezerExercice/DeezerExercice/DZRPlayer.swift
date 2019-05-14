@@ -30,7 +30,7 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate{
         return player
     }()
     
-    @objc class func singleton() -> DZRPlayer {
+    class func singleton() -> DZRPlayer {
         return sharedDZRPlayer
     }
     
@@ -80,7 +80,8 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate{
     }
     
     @objc func playerDidFinishPlaying(sender: Notification) {
-        print("player finisihed")
+        clear()
+        delegate?.playerDidFinishPlaying()
     }
 
 }

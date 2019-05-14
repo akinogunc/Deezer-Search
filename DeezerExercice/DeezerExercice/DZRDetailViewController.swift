@@ -62,9 +62,8 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
     
     //DZRPlayer delegate function
     func playerDidFinishPlaying() {
-        DZRPlayer.singleton().play()
-        playIcon.image = UIImage(named: "pause.png")
-        playButton.setTitle("       Pause", for: .normal)
+        playIcon.image = UIImage(named: "play.png")
+        playButton.setTitle("       Play", for: .normal)
         tableViewDeselectPlaying()
     }
     
@@ -136,13 +135,11 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         if indexPath.section == 0{
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "DZRDetailTopSpaceCell") as! DZRDetailTopSpaceCell
-            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             return cell
             
         }else if indexPath.row == 0{
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "DZRDetailInfoTableViewCell") as! DZRDetailInfoTableViewCell
-            cell.selectionStyle = UITableViewCell.SelectionStyle.none
             pageControl = cell.pageControl
             
             if viewModel.album != nil{
