@@ -42,17 +42,17 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
     @IBAction func playPauseAction(_ sender: Any) {
-        if DZRPlayerShared.status() == .empty{
+        if DZRPlayerShared.status == .empty{
             DZRPlayerShared.playWithSongIndex(album : viewModel.album!, index : 0)
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)
             let indexPath = IndexPath(row: 1, section: 1)
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
-        }else if DZRPlayerShared.status() == .playing{
+        }else if DZRPlayerShared.status == .playing{
             DZRPlayerShared.pause()
             playIcon.image = UIImage(named: "play.png")
             playButton.setTitle("       Play", for: .normal)
-        }else if DZRPlayerShared.status() == .paused{
+        }else if DZRPlayerShared.status == .paused{
             DZRPlayerShared.play()
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)

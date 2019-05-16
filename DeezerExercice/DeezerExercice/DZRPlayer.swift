@@ -34,6 +34,7 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
     var songIndex = 0
     var isUIShown = false
     var timer : Timer?
+    var status = PlayerStatus.empty
     
     override init() {
         super.init()
@@ -49,7 +50,8 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
         
         albumToPlay = album
         songIndex = index
-        
+        UI.configure(album: albumToPlay)
+
         playerItem = AVPlayerItem.init(url: URL(fileURLWithPath: albumToPlay.tracks[index].previewUrl))
         player = AVPlayer(playerItem:playerItem)
         UI.playButton.setImage(UIImage(named: "pause2.png"), for: .normal)
@@ -59,6 +61,7 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
         timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateSlider), userInfo: nil, repeats: true)
 
         player.play()
+        status = .playing
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
         
@@ -70,12 +73,14 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
     @objc func play(){
         if playerItem != nil{
             player.play()
+            status = .playing
         }
         UI.setPauseImages()
     }
     
     func pause(){
         player.pause()
+        status = .paused
         UI.setPlayImages()
     }
     
@@ -94,18 +99,8 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
         delegate?.songChanged()
     }
     
-    func status() -> PlayerStatus{
-        if playerItem == nil{
-            return .empty
-        }else if player.isPlaying{
-            return .playing
-        }else{
-            return .paused
-        }
-    }
-    
     func clear(){
-        playerItem = nil
+        status = .empty
     }
     
     @objc func playerDidFinishPlaying(sender: Notification) {
@@ -137,7 +132,6 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
         UI.minimizedPlay.addTarget(self, action: #selector(UIPlayAction), for: .touchUpInside)
         UI.nextButton.addTarget(self, action: #selector(playNext), for: .touchUpInside)
         UI.minimizedNext.addTarget(self, action: #selector(playNext), for: .touchUpInside)
-        UI.configure(album: albumToPlay)
         UI.frame = CGRect(x: 0, y: (rootViewController?.view.frame.height)!, width: (rootViewController?.view.frame.width)!, height: (rootViewController?.view.frame.height)!)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(maximizePlayer))
@@ -153,9 +147,9 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
     }
     
     @objc func UIPlayAction(){
-        if status() == .playing{
+        if status == .playing{
             pause()
-        }else if status() == .paused{
+        }else if status == .paused{
             play()
         }
     }
@@ -167,9 +161,9 @@ class DZRPlayer: NSObject, AVAudioPlayerDelegate, UIGestureRecognizerDelegate{
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
                 self.UI.showMinimized()
                 
-                if self.status() == .playing{
+                if self.status == .playing{
                     self.UI.setPauseImages()
-                }else if self.status() == .paused{
+                }else if self.status == .paused{
                     self.UI.setPlayImages()
                 }
 
