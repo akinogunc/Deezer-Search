@@ -42,9 +42,22 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBarCustomization()
+        collectionViewCustomization()
     }
     
     // MARK: - UICollectionView delegate methods
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.artists.count == 0 ? 0 : 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SectionHeader", for: indexPath) as? DZRCollectionViewSectionHeader{
+            return sectionHeader
+        }
+        return UICollectionReusableView()
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.artists.count
@@ -69,7 +82,8 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
         searchBar.resignFirstResponder()
-
+        DZRPlayerShared.clear()
+        
         let cell = collectionView.cellForItem(at: indexPath) as! DZRArtistCollectionViewCell
         let detailViewModel = DZRDetailViewModel(id: cell.artistIdentifier, type: .albumDetail)
         
@@ -78,6 +92,11 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
         albumViewController.viewModel = detailViewModel
         self.navigationController?.pushViewController(albumViewController, animated: true)
 
+    }
+    
+    func collectionViewCustomization(){
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        layout?.sectionHeadersPinToVisibleBounds = true
     }
     
     // MARK: - UISearchBar delegate methods

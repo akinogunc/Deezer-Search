@@ -28,7 +28,7 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
         tableViewSetup()
         viewModel.delegate = self
         playButton.layer.cornerRadius = 5
-        DZRPlayer.singleton().delegate = self
+        DZRPlayerShared.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,33 +42,29 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
     @IBAction func playPauseAction(_ sender: Any) {
-        if DZRPlayer.singleton().status() == .empty{
-            let url = URL(fileURLWithPath: (viewModel.album?.tracks[0].previewUrl)!)
-            DZRPlayer.singleton().playWithUrl(url: url)
+        if DZRPlayerShared.status() == .empty{
+            DZRPlayerShared.playWithSongIndex(album : viewModel.album!, index : 0)
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)
             let indexPath = IndexPath(row: 1, section: 1)
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
-        }else if DZRPlayer.singleton().status() == .playing{
-            DZRPlayer.singleton().pause()
+        }else if DZRPlayerShared.status() == .playing{
+            DZRPlayerShared.pause()
             playIcon.image = UIImage(named: "play.png")
             playButton.setTitle("       Play", for: .normal)
-        }else if DZRPlayer.singleton().status() == .paused{
-            DZRPlayer.singleton().play()
+        }else if DZRPlayerShared.status() == .paused{
+            DZRPlayerShared.play()
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)
         }
     }
     
     //DZRPlayer delegate function
-    func playerDidFinishPlaying() {
-        playIcon.image = UIImage(named: "play.png")
-        playButton.setTitle("       Play", for: .normal)
+    func songChanged() {
         tableViewDeselectPlaying()
     }
     
     @IBAction func backAction(_ sender: Any) {
-        DZRPlayer.singleton().clear()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -164,8 +160,7 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row > 0{
-            let url = URL(fileURLWithPath: (viewModel.album?.tracks[indexPath.row-1].previewUrl)!)
-            DZRPlayer.singleton().playWithUrl(url: url)
+            DZRPlayerShared.playWithSongIndex(album: viewModel.album!, index: indexPath.row-1)
             playIcon.image = UIImage(named: "pause.png")
             playButton.setTitle("       Pause", for: .normal)
         }
@@ -180,6 +175,8 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
     func tableViewDeselectPlaying(){
         if let index = tableView.indexPathForSelectedRow{
             tableView.deselectRow(at: index, animated: true)
+            tableView.selectRow(at: IndexPath(row: DZRPlayerShared.songIndex + 1, section: index.section), animated: true, scrollPosition: .bottom)
+
         }
     }
     
