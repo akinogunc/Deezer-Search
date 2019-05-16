@@ -181,6 +181,15 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
         })
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if DZRPlayerShared.isUIShown{
+            let collectionViewLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+            collectionViewLayout?.sectionInset = UIEdgeInsets(top: (collectionViewLayout?.sectionInset.top)!, left: (collectionViewLayout?.sectionInset.left)!, bottom: 80, right: (collectionViewLayout?.sectionInset.right)!)
+            collectionViewLayout?.invalidateLayout()
+        }
+    }
+
 }
 
 

@@ -48,6 +48,7 @@ class DZRDetailViewController: UIViewController, UITableViewDataSource, UITableV
             playButton.setTitle("       Pause", for: .normal)
             let indexPath = IndexPath(row: 1, section: 1)
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
+            self.tableView.contentSize.height = self.tableView.contentSize.height + 80
         }else if DZRPlayerShared.status == .playing{
             DZRPlayerShared.pause()
             playIcon.image = UIImage(named: "play.png")
