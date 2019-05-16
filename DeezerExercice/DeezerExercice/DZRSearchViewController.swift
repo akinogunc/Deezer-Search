@@ -82,7 +82,6 @@ class DZRSearchViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
         searchBar.resignFirstResponder()
-        DZRPlayerShared.clear()
         
         let cell = collectionView.cellForItem(at: indexPath) as! DZRArtistCollectionViewCell
         let detailViewModel = DZRDetailViewModel(id: cell.artistIdentifier, type: .albumDetail)
